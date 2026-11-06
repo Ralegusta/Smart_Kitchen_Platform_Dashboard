@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="id">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark" />
+  <title>Smart Kitchen | IoT Monitoring</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-icon">S</div>
+        <div><strong>SMART KITCHEN</strong><small>Safety Control Center</small></div>
+      </div>
+      <div class="nav-item active"> <span>Dashboard</span></div>
+      <div class="nav-item"> <span>Riwayat Data</span></div>
+      <div class="sidebar-bottom"><span class="dot"></span> NodeMCU-32S / ESP32 </div>
+    </aside>
+    <main class="content">
+      <header class="topbar">
+        <div>
+          <div class="eyebrow">MONITORING REALTIME</div>
+          <h1>Smart Kitchen Safety</h1>
+          <p>Pemantauan sensor, aktuator, dan analitik berbasis cloud.</p>
+        </div>
+        <div class="header-actions"><span id="storage" class="storage">Memeriksa database…</span><span
+            id="lastSync">Belum ada data</span></div>
+      </header>
+      <div id="demoBanner" class="demo-banner" hidden>MODE LATIHAN LOKAL — data tersimpan di file lokal, bukan cloud.
+        Data simulasi bukan pembacaan perangkat asli.</div>
+      <section class="hero">
+        <div><span class="eyebrow">STATUS PERANGKAT</span>
+          <h2 id="systemStatus">Belum ada data</h2>
+          <p id="systemDetail">Kirim sampel pertama dari ESP32 atau script demo.</p>
+        </div>
+        <div class="hero-meta"><span id="onlineBadge" class="badge neutral">Belum terhubung</span><span id="modeBadge"
+            class="badge neutral">Mode: —</span><span id="sensorBadge" class="badge neutral">MQ-2: —</span></div>
+      </section>
+      <section class="stats-grid">
+        <article class="kpi">
+          <div class="kpi-title"> Suhu DHT11</div>
+          <div class="kpi-value"><span id="temp">—</span><small>°C</small></div>
+          <p id="tempStat">Rata-rata: —</p>
+        </article>
+        <article class="kpi">
+          <div class="kpi-title"> Kelembapan</div>
+          <div class="kpi-value"><span id="humidity">—</span><small>%</small></div>
+          <p id="humStat">Rata-rata: —</p>
+        </article>
+        <article class="kpi">
+          <div class="kpi-title"> MQ-2</div>
+          <div class="kpi-value"><span id="gas">—</span><small>ADC</small></div>
+          <p id="gasStat">Belum ada pembacaan</p>
+        </article>
+        <article class="kpi">
+          <div class="kpi-title"> Kejadian bahaya nyata</div>
+          <div class="kpi-value"><span id="alarms">0</span><small>event</small></div>
+          <p id="alarmStat">Simulasi: 0 event</p>
+        </article>
+      </section>
+      <section class="two-col">
+        <article class="panel">
+          <div class="panel-head">
+            <div>
+              <h3>Tren Pembacaan Sensor</h3>
+              <p>Grafik sensor asli, atau simulasi berlabel jika data asli belum tersedia.</p>
+            </div><select id="span" aria-label="Rentang waktu">
+              <option value="1h">1 jam</option>
+              <option value="24h" selected>24 jam</option>
+              <option value="7d">7 hari</option>
+            </select>
+          </div>
+          <div class="chart-title"><span class="legend"><i class="legend-temp"></i> Suhu (°C)</span><span
+              class="legend"><i class="legend-hum"></i> Kelembapan (%)</span></div><svg id="chart" viewBox="0 0 720 268"
+            role="img" aria-label="Grafik sensor suhu dan kelembapan" preserveAspectRatio="none"><text x="360" y="130"
+              text-anchor="middle" fill="#95a3b8">Belum ada data</text></svg>
+          <div class="chart-foot" id="chartFoot">—</div>
+        </article>
+        <article class="panel">
+          <div class="panel-head">
+            <div>
+              <h3>Status Aktuator</h3>
+              <p>Perintah dan output program (bukan umpan balik posisi fisik).</p>
+            </div>
+          </div>
+          <div class="act-row"><span>Servo target</span><strong id="servo">—</strong></div>
+          <div class="act-row"><span>LED merah</span><strong id="red">—</strong></div>
+          <div class="act-row"><span>LED hijau</span><strong id="green">—</strong></div>
+          <div class="act-row"><span>Buzzer (saat sampel)</span><strong id="buzzer">—</strong></div>
+          <div class="act-row"><span>MQ-2 threshold</span><strong id="threshold">—</strong></div>
+          <div class="act-footer">Catatan: status output diambil dari data yang dilaporkan firmware ESP32.</div>
+        </article>
+      </section>
+      <section class="two-col bottom-grid">
+        <article class="panel">
+          <div class="panel-head">
+            <div>
+              <h3>Riwayat Pembacaan</h3>
+              <p>5 data terbaru, termasuk data simulasi.</p>
+            </div>
+          </div>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Waktu</th>
+                  <th>Suhu</th>
+                  <th>MQ-2</th>
+                  <th>Mode</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="readings">
+                <tr>
+                  <td colspan="5">Belum ada data</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+        <article class="panel">
+          <div class="panel-head">
+            <div>
+              <h3>Log Peristiwa</h3>
+              <p>Perubahan status dan perintah aktuator.</p>
+            </div>
+          </div>
+          <div id="events" class="event-list">
+            <p>Belum ada peristiwa</p>
+          </div>
+        </article>
+      </section>
+      <footer><span>SMART KITCHEN SAFETY • Tugas Besar IoT</span><span>Refresh otomatis 5 detik · Waktu ditampilkan
+          dalam WIB</span></footer>
+    </main>
+  </div>
+  <script src="/app.js" defer></script>
+</body>
+
+</html>
